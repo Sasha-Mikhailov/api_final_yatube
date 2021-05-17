@@ -4,3 +4,8 @@ pytest
 pytest-django
 djangorestframework
 djangorestframework-simplejwt
+
+#personal customization
+flake8
+black
+isort
