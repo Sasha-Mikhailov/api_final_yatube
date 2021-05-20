@@ -1,9 +1,4 @@
-POST http://localhost:80/api/item
-Content-Type: application/x-www-form-urlencoded
 
-id=99&content=new-element
-
-###
 POST http://localhost:8000/api/v1/token/
 Content-Type: application/json
 
@@ -29,9 +24,44 @@ Content-Type: application/json
 ###
 
 POST http://localhost:8000/api/v1/group/
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjIxMjM1OTQ1LCJqdGkiOiJmYTgyNjlkY2EwOWU0ZTQ3OTNhNTEzZjgyYmQ4YmViMiIsInVzZXJfaWQiOjN9.ySNey8ZCDCf7Dnxg9_0FornoeEND6o0e7greRuDRjxE
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
   "title": "Группа  номер 3"
+}
+
+###
+
+GET http://localhost:8000/api/v1/follow/
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+
+GET http://localhost:8000/api/v1/follow/
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+   "following": "leo"
+}
+
+###
+
+GET http://localhost:8000/api/v1/follow/
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+   "search": "leo"
+}
+
+###
+
+POST http://localhost:8000/api/v1/follow/
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
 }
