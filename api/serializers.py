@@ -1,11 +1,13 @@
-from rest_framework import serializers
-from rest_framework.validators import UniqueTogetherValidator
+import logging
+
 from django.contrib.auth import get_user_model
+from rest_framework import serializers
+# from rest_framework.validators import UniqueTogetherValidator
 
-from .models import Comment, Post, Group, Follow
-
+from .models import Comment, Follow, Group, Post
 
 User = get_user_model()
+
 
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
@@ -39,7 +41,7 @@ class FollowSerializer(serializers.ModelSerializer):
     user = serializers.SlugRelatedField(
         read_only=True,
         slug_field="username",
-        default=serializers.CurrentUserDefault()
+        # default=serializers.CurrentUserDefault()
         # queryset=User.objects.all()
     )
 
@@ -49,8 +51,17 @@ class FollowSerializer(serializers.ModelSerializer):
         # queryset=User.objects.all()
     )
 
+    def validate(self, data):
+        logging.warning(f'\t >> data: {data}')
+        logging.warning(f'\t >> data keys: {[k for k in data.keys()]}')
+        # if not data:
+        #     raise serializers.ValidationError("data can't be empty")
+        if not data.get('following', None):
+            raise serializers.ValidationError("following is required")
+        return data
+
     class Meta:
-        fields = '__all__'
+        fields = "__all__"
         model = Follow
         #
         # validators = [
@@ -60,8 +71,3 @@ class FollowSerializer(serializers.ModelSerializer):
         #         message=''
         #     )
         # ]
-
-    def validate(self, data):
-        if not data:
-            raise serializers.ValidationError("data can't be empty")
-        return data

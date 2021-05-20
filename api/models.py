@@ -10,13 +10,16 @@ class Group(models.Model):
     )
 
     description = models.TextField(
-        verbose_name="Описание", help_text="О чём тут обычно пишут",
-        blank=True, null=True,
+        verbose_name="Описание",
+        help_text="О чём тут обычно пишут",
+        blank=True,
+        null=True,
     )
 
     slug = models.SlugField(
         # unique=True  # new requirements in this project??
-        blank=True, null=True,  # if slug is empty, access only by ID then
+        blank=True,
+        null=True,  # if slug is empty, access only by ID then
     )
 
     def __str__(self):

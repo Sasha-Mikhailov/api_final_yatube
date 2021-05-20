@@ -13,10 +13,10 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
             return True
 
         # Write permissions are only allowed to the owner of the snippet.
-        if hasattr(obj, 'author'):
+        if hasattr(obj, "author"):
             return obj.author == request.user
         # make it work woth Follow model
-        elif hasattr(obj, 'user'):
+        elif hasattr(obj, "user"):
             return obj.user == request.user
 
 

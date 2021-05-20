@@ -5,7 +5,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from .views import CommentViewSet, PostViewSet, GroupViewSet, FollowViewSet
+from .views import CommentViewSet, FollowViewSet, GroupViewSet, PostViewSet
 
 api_v1_router = DefaultRouter()
 api_v1_router.register("posts", PostViewSet, basename="posts")
