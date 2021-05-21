@@ -3,7 +3,7 @@ import logging
 from django.contrib.auth import get_user_model
 from django.db.models.query import QuerySet
 from django.shortcuts import get_object_or_404
-from rest_framework import permissions, viewsets  # , status, exceptions
+from rest_framework import permissions, viewsets, exceptions, filters  # , status
 # from rest_framework.response import Response
 
 from .models import Follow, Group, Post
@@ -82,8 +82,8 @@ class FollowViewSet(viewsets.ModelViewSet):
     serializer_class = FollowSerializer
     permission_classes = [
         permissions.IsAuthenticated,
-        # IsOwnerOrReadOnly,
     ]
+    lookup_field = 'following'
 
     def get_queryset(self):
         queryset = Follow.objects.filter(user=self.request.user)
@@ -94,10 +94,16 @@ class FollowViewSet(viewsets.ModelViewSet):
 
         logging.warning(f'\t >> data {self.request.data}')
 
-        # if None not in [following_user, search_user]:
-        #     raise exceptions.ValidationError(
-        #         'can not use "following" and "search" at the same time'
-        #     )
+        if None not in [following_user, search_user]:
+            raise exceptions.ValidationError(
+                'can not use "following" and "search" at the same time'
+            )
+
+        # if following_user:
+        #     if self.request.user == get_object_or_404(User, username=following_user):
+        #         exceptions.ValidationError(
+        #             'can not follow yourself'
+        #         )
 
         if self.request.method == "GET" and user_from_request:
             user = get_object_or_404(User, username=user_from_request)
