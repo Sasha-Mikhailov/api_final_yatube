@@ -60,7 +60,17 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "following": "leo"
+  "following": "user1"
+}
+
+###
+
+GET http://localhost:8000/api/v1/follow/?search=leo
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "following": "user1"
 }
 
 ###
