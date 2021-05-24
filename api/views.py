@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.db.models.query import QuerySet
 from django.shortcuts import get_object_or_404
 from rest_framework import exceptions, filters, permissions, viewsets
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import Follow, Group, Post
 from .permissions import IsOwnerOrReadOnly
@@ -47,21 +48,8 @@ class PostViewSet(viewsets.ModelViewSet):
         permissions.IsAuthenticatedOrReadOnly,
         IsOwnerOrReadOnly,
     ]
-
-    def get_queryset(self):
-        group_id = self.request.query_params.get("group", None)
-
-        # if 'group' in URL parametes, return all posts for the group
-        if self.request.method == "GET" and group_id:
-            group = get_object_or_404(Group, pk=group_id)
-            queryset = group.posts
-        else:
-            queryset = self.queryset
-
-        if isinstance(queryset, QuerySet):
-            # Ensure queryset is re-evaluated on each request.
-            queryset = queryset.all()
-        return queryset
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['group']
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)

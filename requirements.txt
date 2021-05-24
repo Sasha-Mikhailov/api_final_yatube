@@ -1,5 +1,6 @@
 requests
 django
+django-filter
 pytest
 pytest-django
 djangorestframework
