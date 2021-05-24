@@ -1,8 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.db.models.query import QuerySet
 from django.shortcuts import get_object_or_404
-from rest_framework import exceptions, filters, permissions, viewsets, mixins
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, mixins, permissions, viewsets
 
 from .models import Follow, Group, Post
 from .permissions import IsOwnerOrReadOnly
@@ -16,12 +16,13 @@ from .serializers import (
 User = get_user_model()
 
 
-class GetPostViewSetTemplate(mixins.CreateModelMixin,
-                             mixins.ListModelMixin,
-                             viewsets.GenericViewSet):
+class GetPostViewSetTemplate(
+    mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet
+):
     """
-      A viewset that provides default `create()` and `list()` and  actions.
+    A viewset that provides default `create()` and `list()` and  actions.
     """
+
     pass
 
 
@@ -58,7 +59,7 @@ class PostViewSet(viewsets.ModelViewSet):
         IsOwnerOrReadOnly,
     ]
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['group']
+    filterset_fields = ["group"]
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
@@ -78,7 +79,10 @@ class FollowViewSet(GetPostViewSetTemplate):
         permissions.IsAuthenticated,
     ]
     filter_backends = [filters.SearchFilter]
-    search_fields = ["user__username", "following__username", ]
+    search_fields = [
+        "user__username",
+        "following__username",
+    ]
 
     def get_queryset(self):
         queryset = Follow.objects.filter(following=self.request.user)
