@@ -67,4 +67,3 @@ class FollowSerializer(serializers.ModelSerializer):
                 "You can not follow to yourself."
             )
         return following
-
