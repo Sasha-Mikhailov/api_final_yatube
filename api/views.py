@@ -78,18 +78,10 @@ class FollowViewSet(GetPostViewSetTemplate):
         permissions.IsAuthenticated,
     ]
     filter_backends = [filters.SearchFilter]
-    search_fields = ["user__username"]
+    search_fields = ["user__username", "following__username", ]
 
     def get_queryset(self):
         queryset = Follow.objects.filter(following=self.request.user)
-
-        following_user = self.request.data.get("following", None)
-        search_user = self.request.query_params.get("search", None)
-
-        if None not in [following_user, search_user]:
-            raise exceptions.ValidationError(
-                'can not use "following" and "search" at the same time'
-            )
 
         if isinstance(queryset, QuerySet):
             # Ensure queryset is re-evaluated on each request.
