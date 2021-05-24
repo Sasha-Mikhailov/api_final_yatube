@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db.models.query import QuerySet
 from django.shortcuts import get_object_or_404
-from rest_framework import exceptions, filters, permissions, viewsets
+from rest_framework import exceptions, filters, permissions, viewsets, mixins
 from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import Follow, Group, Post
@@ -14,6 +14,15 @@ from .serializers import (
 )
 
 User = get_user_model()
+
+
+class GetPostViewSetTemplate(mixins.CreateModelMixin,
+                             mixins.ListModelMixin,
+                             viewsets.GenericViewSet):
+    """
+      A viewset that provides default `create()` and `list()` and  actions.
+    """
+    pass
 
 
 class CommentViewSet(viewsets.ModelViewSet):
@@ -55,7 +64,7 @@ class PostViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user)
 
 
-class GroupViewSet(viewsets.ModelViewSet):
+class GroupViewSet(GetPostViewSetTemplate):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
     permission_classes = [
@@ -63,7 +72,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     ]
 
 
-class FollowViewSet(viewsets.ModelViewSet):
+class FollowViewSet(GetPostViewSetTemplate):
     serializer_class = FollowSerializer
     permission_classes = [
         permissions.IsAuthenticated,
