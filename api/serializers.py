@@ -68,9 +68,3 @@ class FollowSerializer(serializers.ModelSerializer):
             )
         return following
 
-    def validate(self, data):
-        if not data:
-            raise serializers.ValidationError("data can't be empty")
-        if not data.get("following", None):
-            raise serializers.ValidationError("following is required")
-        return data
